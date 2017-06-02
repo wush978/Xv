@@ -1,5 +1,7 @@
+
 if (isNamespaceLoaded("Xv")) unloadNamespace("Xv")
 m1 <- Matrix::sparse.model.matrix(~ ., iris)
+m2 <- as(m1, "RsparseMatrix")
 stopifnot(class(m1) == "dgCMatrix")
 m2 <- as(m1, "dgTMatrix")
 stopifnot(class(m2) == "dgTMatrix")
@@ -50,9 +52,14 @@ result.names <- grep("^Matrix", ls(test.env), value = TRUE)
 for(name in result.names) {
   name.ref <- name
   name.test <- gsub("^Matrix", "Xv", name)
-  stopifnot(name.test %in% ls(test.env))
-  stopifnot(is.numeric(test.env[[name.ref]]))
-  stopifnot(is.numeric(test.env[[name.test]]))
-  stopifnot(test.env[[name.ref]] == test.env[[name.test]])
-  stopifnot(attr(test.env[[name.test]], "t")[3] < attr(test.env[[name.ref]], "t")[3])
+  tryCatch({
+    stopifnot(name.test %in% ls(test.env))
+    stopifnot(is.numeric(test.env[[name.ref]]))
+    stopifnot(is.numeric(test.env[[name.test]]))
+    stopifnot(test.env[[name.ref]] == test.env[[name.test]])
+    stopifnot(attr(test.env[[name.test]], "t")[3] < attr(test.env[[name.ref]], "t")[3])
+  }, error = function(e) {
+    cat(sprintf("name:%s\n", name))
+    stop(conditionMessage(e))
+  })
 }
