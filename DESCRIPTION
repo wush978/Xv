@@ -8,7 +8,8 @@ Description: Implement sparse matrix multiplication in C++ to enhance the perfor
 License: GPL(>= 3)
 Encoding: UTF-8
 LazyData: true
-Imports: methods, Matrix, Rcpp (>= 0.12.10)
+Depends: Matrix
+Imports: methods, Rcpp (>= 0.12.10)
 LinkingTo: Rcpp
 SystemRequirements: C++11
 RoxygenNote: 6.0.1
