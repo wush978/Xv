@@ -3,7 +3,8 @@
 .onLoad <- function(libname, pkgname) {
 }
 
+evalqOnLoad({
 #'@importFrom methods setMethod
 #'@importClassesFrom Matrix dgCMatrix
-#'@export
 setMethod("%*%", signature(x = "dgCMatrix", y = "numeric"), Xv:::Xv_dgCMatrix_numeric)
+})

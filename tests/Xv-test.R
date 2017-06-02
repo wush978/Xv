@@ -4,7 +4,6 @@ set.seed(1)
 x1.1 <- rnorm(ncol(m1))
 x1.2 <- rnorm(nrow(m1))
 
-
 .sm <- selectMethod("%*%", signature(x = class(m1), y = class(x1.1)))
 stopifnot(.sm@defined@package == c("Matrix", "Matrix"))
 r1.1 <- (m1 %*% x1.1)@x
