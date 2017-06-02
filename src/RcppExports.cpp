@@ -17,9 +17,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// vX_numeric_dgCMatrix
+SEXP vX_numeric_dgCMatrix(NumericVector x, S4 y);
+RcppExport SEXP Xv_vX_numeric_dgCMatrix(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< S4 >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(vX_numeric_dgCMatrix(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"Xv_Xv_dgCMatrix_numeric", (DL_FUNC) &Xv_Xv_dgCMatrix_numeric, 2},
+    {"Xv_vX_numeric_dgCMatrix", (DL_FUNC) &Xv_vX_numeric_dgCMatrix, 2},
     {NULL, NULL, 0}
 };
 
