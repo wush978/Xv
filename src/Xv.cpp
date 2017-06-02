@@ -42,6 +42,22 @@ SEXP Xv_dgTMatrix_numeric(S4 x, NumericVector y) {
 }
 
 //[[Rcpp::export]]
+SEXP Xv_dgRMatrix_numeric(S4 x, NumericVector y) {
+  IntegerVector _j(x.slot("j")), _p(x.slot("p")), _Dim(x.slot("Dim"));
+  check_Xv(_Dim, y);
+  NumericVector _x(x.slot("x"));
+  NumericVector result(_Dim[0]);
+  for(auto row = 0;row < _Dim[0];row++) {
+    for(auto index = _p[row];index != _p[row + 1];index++) {
+      const auto col = _j[index];
+      const auto value = _x[index];
+      result[row] += y[col] * value;
+    }
+  }
+  return result;
+}
+
+//[[Rcpp::export]]
 SEXP vX_numeric_dgCMatrix(NumericVector x, S4 y) {
   IntegerVector _i(y.slot("i")), _p(y.slot("p")), _Dim(y.slot("Dim"));
   check_vX(_Dim, x);
@@ -71,3 +87,20 @@ SEXP vX_numeric_dgTMatrix(NumericVector x, S4 y) {
   }
   return result;
 }
+
+//[[Rcpp::export]]
+SEXP vX_numeric_dgRMatrix(NumericVector x, S4 y) {
+  IntegerVector _j(y.slot("j")), _p(y.slot("p")), _Dim(y.slot("Dim"));
+  check_vX(_Dim, x);
+  NumericVector _x(y.slot("x"));
+  NumericVector result(_Dim[1]);
+  for(auto row = 0;row < _Dim[0];row++) {
+    for(auto index = _p[row];index != _p[row + 1];index++) {
+      const auto col = _j[index];
+      const auto value = _x[index];
+      result[col] += x[row] * value;
+    }
+  }
+  return result;
+}
+

@@ -62,6 +62,25 @@ namespace Xv {
         return Rcpp::as<SEXP >(rcpp_result_gen);
     }
 
+    inline SEXP Xv_dgRMatrix_numeric(S4 x, NumericVector y) {
+        typedef SEXP(*Ptr_Xv_dgRMatrix_numeric)(SEXP,SEXP);
+        static Ptr_Xv_dgRMatrix_numeric p_Xv_dgRMatrix_numeric = NULL;
+        if (p_Xv_dgRMatrix_numeric == NULL) {
+            validateSignature("SEXP(*Xv_dgRMatrix_numeric)(S4,NumericVector)");
+            p_Xv_dgRMatrix_numeric = (Ptr_Xv_dgRMatrix_numeric)R_GetCCallable("Xv", "Xv_Xv_dgRMatrix_numeric");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_Xv_dgRMatrix_numeric(Rcpp::wrap(x), Rcpp::wrap(y));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<SEXP >(rcpp_result_gen);
+    }
+
     inline SEXP vX_numeric_dgCMatrix(NumericVector x, S4 y) {
         typedef SEXP(*Ptr_vX_numeric_dgCMatrix)(SEXP,SEXP);
         static Ptr_vX_numeric_dgCMatrix p_vX_numeric_dgCMatrix = NULL;
@@ -92,6 +111,25 @@ namespace Xv {
         {
             RNGScope RCPP_rngScope_gen;
             rcpp_result_gen = p_vX_numeric_dgTMatrix(Rcpp::wrap(x), Rcpp::wrap(y));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<SEXP >(rcpp_result_gen);
+    }
+
+    inline SEXP vX_numeric_dgRMatrix(NumericVector x, S4 y) {
+        typedef SEXP(*Ptr_vX_numeric_dgRMatrix)(SEXP,SEXP);
+        static Ptr_vX_numeric_dgRMatrix p_vX_numeric_dgRMatrix = NULL;
+        if (p_vX_numeric_dgRMatrix == NULL) {
+            validateSignature("SEXP(*vX_numeric_dgRMatrix)(NumericVector,S4)");
+            p_vX_numeric_dgRMatrix = (Ptr_vX_numeric_dgRMatrix)R_GetCCallable("Xv", "Xv_vX_numeric_dgRMatrix");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_vX_numeric_dgRMatrix(Rcpp::wrap(x), Rcpp::wrap(y));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

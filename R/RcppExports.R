@@ -9,12 +9,20 @@ Xv_dgTMatrix_numeric <- function(x, y) {
     .Call(Xv_Xv_dgTMatrix_numeric, x, y)
 }
 
+Xv_dgRMatrix_numeric <- function(x, y) {
+    .Call(Xv_Xv_dgRMatrix_numeric, x, y)
+}
+
 vX_numeric_dgCMatrix <- function(x, y) {
     .Call(Xv_vX_numeric_dgCMatrix, x, y)
 }
 
 vX_numeric_dgTMatrix <- function(x, y) {
     .Call(Xv_vX_numeric_dgTMatrix, x, y)
+}
+
+vX_numeric_dgRMatrix <- function(x, y) {
+    .Call(Xv_vX_numeric_dgRMatrix, x, y)
 }
 
 # Register entry points for exported C++ functions

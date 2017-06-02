@@ -70,6 +70,37 @@ RcppExport SEXP Xv_Xv_dgTMatrix_numeric(SEXP xSEXP, SEXP ySEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// Xv_dgRMatrix_numeric
+SEXP Xv_dgRMatrix_numeric(S4 x, NumericVector y);
+static SEXP Xv_Xv_dgRMatrix_numeric_try(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< S4 >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(Xv_dgRMatrix_numeric(x, y));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP Xv_Xv_dgRMatrix_numeric(SEXP xSEXP, SEXP ySEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(Xv_Xv_dgRMatrix_numeric_try(xSEXP, ySEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 // vX_numeric_dgCMatrix
 SEXP vX_numeric_dgCMatrix(NumericVector x, S4 y);
 static SEXP Xv_vX_numeric_dgCMatrix_try(SEXP xSEXP, SEXP ySEXP) {
@@ -132,6 +163,37 @@ RcppExport SEXP Xv_vX_numeric_dgTMatrix(SEXP xSEXP, SEXP ySEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// vX_numeric_dgRMatrix
+SEXP vX_numeric_dgRMatrix(NumericVector x, S4 y);
+static SEXP Xv_vX_numeric_dgRMatrix_try(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< S4 >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(vX_numeric_dgRMatrix(x, y));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP Xv_vX_numeric_dgRMatrix(SEXP xSEXP, SEXP ySEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(Xv_vX_numeric_dgRMatrix_try(xSEXP, ySEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int Xv_RcppExport_validate(const char* sig) { 
@@ -139,8 +201,10 @@ static int Xv_RcppExport_validate(const char* sig) {
     if (signatures.empty()) {
         signatures.insert("SEXP(*Xv_dgCMatrix_numeric)(S4,NumericVector)");
         signatures.insert("SEXP(*Xv_dgTMatrix_numeric)(S4,NumericVector)");
+        signatures.insert("SEXP(*Xv_dgRMatrix_numeric)(S4,NumericVector)");
         signatures.insert("SEXP(*vX_numeric_dgCMatrix)(NumericVector,S4)");
         signatures.insert("SEXP(*vX_numeric_dgTMatrix)(NumericVector,S4)");
+        signatures.insert("SEXP(*vX_numeric_dgRMatrix)(NumericVector,S4)");
     }
     return signatures.find(sig) != signatures.end();
 }
@@ -149,8 +213,10 @@ static int Xv_RcppExport_validate(const char* sig) {
 RcppExport SEXP Xv_RcppExport_registerCCallable() { 
     R_RegisterCCallable("Xv", "Xv_Xv_dgCMatrix_numeric", (DL_FUNC)Xv_Xv_dgCMatrix_numeric_try);
     R_RegisterCCallable("Xv", "Xv_Xv_dgTMatrix_numeric", (DL_FUNC)Xv_Xv_dgTMatrix_numeric_try);
+    R_RegisterCCallable("Xv", "Xv_Xv_dgRMatrix_numeric", (DL_FUNC)Xv_Xv_dgRMatrix_numeric_try);
     R_RegisterCCallable("Xv", "Xv_vX_numeric_dgCMatrix", (DL_FUNC)Xv_vX_numeric_dgCMatrix_try);
     R_RegisterCCallable("Xv", "Xv_vX_numeric_dgTMatrix", (DL_FUNC)Xv_vX_numeric_dgTMatrix_try);
+    R_RegisterCCallable("Xv", "Xv_vX_numeric_dgRMatrix", (DL_FUNC)Xv_vX_numeric_dgRMatrix_try);
     R_RegisterCCallable("Xv", "Xv_RcppExport_validate", (DL_FUNC)Xv_RcppExport_validate);
     return R_NilValue;
 }
@@ -158,8 +224,10 @@ RcppExport SEXP Xv_RcppExport_registerCCallable() {
 static const R_CallMethodDef CallEntries[] = {
     {"Xv_Xv_dgCMatrix_numeric", (DL_FUNC) &Xv_Xv_dgCMatrix_numeric, 2},
     {"Xv_Xv_dgTMatrix_numeric", (DL_FUNC) &Xv_Xv_dgTMatrix_numeric, 2},
+    {"Xv_Xv_dgRMatrix_numeric", (DL_FUNC) &Xv_Xv_dgRMatrix_numeric, 2},
     {"Xv_vX_numeric_dgCMatrix", (DL_FUNC) &Xv_vX_numeric_dgCMatrix, 2},
     {"Xv_vX_numeric_dgTMatrix", (DL_FUNC) &Xv_vX_numeric_dgTMatrix, 2},
+    {"Xv_vX_numeric_dgRMatrix", (DL_FUNC) &Xv_vX_numeric_dgRMatrix, 2},
     {"Xv_RcppExport_registerCCallable", (DL_FUNC) &Xv_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}
 };
