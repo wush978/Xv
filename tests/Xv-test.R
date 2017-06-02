@@ -1,14 +1,15 @@
 if (isNamespaceLoaded("Xv")) unloadNamespace("Xv")
 m1 <- Matrix::sparse.model.matrix(~ ., iris)
 stopifnot(class(m1) == "dgCMatrix")
+m2 <- as(m1, "dgTMatrix")
+stopifnot(class(m2) == "dgTMatrix")
+m.all <- list(m1, m2)
 set.seed(1)
 x1.1 <- rnorm(ncol(m1))
 x1.2 <- rnorm(nrow(m1))
 test.env <- new.env()
 
 # check testing method
-.sm <- selectMethod("%*%", signature(x = class(m1), y = class(x1.1)))
-stopifnot(.sm@defined@package == c("Matrix", "Matrix"))
 
 # define testing action
 testXv <- function(name, m, x1, x2, action) {
@@ -24,13 +25,23 @@ testXv <- function(name, m, x1, x2, action) {
 }
 
 # Testing with Matrix
-testXv(sprintf("Matrix-%s-numeric", class(m1)), m1, x1.1, x1.2, function(x, y) (x %*% y)@x)
+for(m in m.all) {
+  .sm <- selectMethod("%*%", signature(x = class(m), y = class(x1.1)))
+  stopifnot(.sm@defined@package == c("Matrix", "Matrix"))
+  .sm <- selectMethod("%*%", signature(x = class(x1.2), y = class(m)))
+  stopifnot(.sm@defined@package == c("Matrix", "Matrix"))
+  testXv(sprintf("Matrix-%s-numeric", class(m)), m, x1.1, x1.2, function(x, y) (x %*% y)@x)
+}
 
 # Testing with Xv
 loadNamespace("Xv")
-.sm <- selectMethod("%*%", signature(x = class(m1), y = class(x1.1)))
-stopifnot(.sm@defined@package == c("Matrix", "methods"))
-testXv(sprintf("Xv-%s-numeric", class(m1)), m1, x1.1, x1.2, function(x, y) x %*% y)
+for(m in m.all) {
+  .sm <- selectMethod("%*%", signature(x = class(m), y = class(x1.1)))
+  stopifnot(.sm@defined@package == c("Matrix", "methods"))
+  .sm <- selectMethod("%*%", signature(x = class(x1.2), y = class(m)))
+  stopifnot(.sm@defined@package == c("methods", "Matrix"))
+  testXv(sprintf("Xv-%s-numeric", class(m)), m, x1.1, x1.2, function(x, y) x %*% y)
+}
 
 # Verify results
 result.names <- grep("^Matrix", ls(test.env), value = TRUE)

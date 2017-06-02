@@ -5,7 +5,19 @@ Xv_dgCMatrix_numeric <- function(x, y) {
     .Call(Xv_Xv_dgCMatrix_numeric, x, y)
 }
 
+Xv_dgTMatrix_numeric <- function(x, y) {
+    .Call(Xv_Xv_dgTMatrix_numeric, x, y)
+}
+
 vX_numeric_dgCMatrix <- function(x, y) {
     .Call(Xv_vX_numeric_dgCMatrix, x, y)
 }
 
+vX_numeric_dgTMatrix <- function(x, y) {
+    .Call(Xv_vX_numeric_dgTMatrix, x, y)
+}
+
+# Register entry points for exported C++ functions
+methods::setLoadAction(function(ns) {
+    .Call('Xv_RcppExport_registerCCallable', PACKAGE = 'Xv')
+})
