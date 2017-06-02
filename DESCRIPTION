@@ -1,0 +1,14 @@
+Package: Xv
+Type: Package
+Title: Sparse Matrix Multiplication
+Version: 0.1.0
+Author: Wush Wu
+Maintainer: Wush Wu <wush978@gmail.com>
+Description: Implement sparse matrix multiplication in C++ to enhance the performance.
+License: GPL(>= 3)
+Encoding: UTF-8
+LazyData: true
+Imports: methods, Matrix, Rcpp (>= 0.12.10)
+LinkingTo: Rcpp
+SystemRequirements: C++11
+RoxygenNote: 6.0.1
