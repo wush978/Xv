@@ -27,6 +27,15 @@ SEXP Xv_dgCMatrix_numeric(S4 x, NumericVector y) {
 }
 
 //[[Rcpp::export]]
+SEXP Xv_dgCMatrix_numeric_folded(S4 x, NumericVector v, IntegerVector foldid, int target, bool is_exclude) {
+  IntegerVector _i(x.slot("i")), _p(x.slot("p")), _Dim(x.slot("Dim"));
+  check_Xv(_Dim, v);
+  NumericVector _x(x.slot("x"));
+  NumericVector result(_Dim[0]);
+  
+}
+
+//[[Rcpp::export]]
 SEXP Xv_dgTMatrix_numeric(S4 x, NumericVector y) {
   IntegerVector _i(x.slot("i")), _j(x.slot("j")), _Dim(x.slot("Dim"));
   check_Xv(_Dim, y);

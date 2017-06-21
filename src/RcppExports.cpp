@@ -39,6 +39,40 @@ RcppExport SEXP Xv_Xv_dgCMatrix_numeric(SEXP xSEXP, SEXP ySEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// Xv_dgCMatrix_numeric_folded
+SEXP Xv_dgCMatrix_numeric_folded(S4 x, NumericVector v, IntegerVector foldid, int target, bool is_exclude);
+static SEXP Xv_Xv_dgCMatrix_numeric_folded_try(SEXP xSEXP, SEXP vSEXP, SEXP foldidSEXP, SEXP targetSEXP, SEXP is_excludeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< S4 >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type v(vSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type foldid(foldidSEXP);
+    Rcpp::traits::input_parameter< int >::type target(targetSEXP);
+    Rcpp::traits::input_parameter< bool >::type is_exclude(is_excludeSEXP);
+    rcpp_result_gen = Rcpp::wrap(Xv_dgCMatrix_numeric_folded(x, v, foldid, target, is_exclude));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP Xv_Xv_dgCMatrix_numeric_folded(SEXP xSEXP, SEXP vSEXP, SEXP foldidSEXP, SEXP targetSEXP, SEXP is_excludeSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(Xv_Xv_dgCMatrix_numeric_folded_try(xSEXP, vSEXP, foldidSEXP, targetSEXP, is_excludeSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 // Xv_dgTMatrix_numeric
 SEXP Xv_dgTMatrix_numeric(S4 x, NumericVector y);
 static SEXP Xv_Xv_dgTMatrix_numeric_try(SEXP xSEXP, SEXP ySEXP) {
@@ -200,6 +234,7 @@ static int Xv_RcppExport_validate(const char* sig) {
     static std::set<std::string> signatures;
     if (signatures.empty()) {
         signatures.insert("SEXP(*Xv_dgCMatrix_numeric)(S4,NumericVector)");
+        signatures.insert("SEXP(*Xv_dgCMatrix_numeric_folded)(S4,NumericVector,IntegerVector,int,bool)");
         signatures.insert("SEXP(*Xv_dgTMatrix_numeric)(S4,NumericVector)");
         signatures.insert("SEXP(*Xv_dgRMatrix_numeric)(S4,NumericVector)");
         signatures.insert("SEXP(*vX_numeric_dgCMatrix)(NumericVector,S4)");
@@ -212,6 +247,7 @@ static int Xv_RcppExport_validate(const char* sig) {
 // registerCCallable (register entry points for exported C++ functions)
 RcppExport SEXP Xv_RcppExport_registerCCallable() { 
     R_RegisterCCallable("Xv", "Xv_Xv_dgCMatrix_numeric", (DL_FUNC)Xv_Xv_dgCMatrix_numeric_try);
+    R_RegisterCCallable("Xv", "Xv_Xv_dgCMatrix_numeric_folded", (DL_FUNC)Xv_Xv_dgCMatrix_numeric_folded_try);
     R_RegisterCCallable("Xv", "Xv_Xv_dgTMatrix_numeric", (DL_FUNC)Xv_Xv_dgTMatrix_numeric_try);
     R_RegisterCCallable("Xv", "Xv_Xv_dgRMatrix_numeric", (DL_FUNC)Xv_Xv_dgRMatrix_numeric_try);
     R_RegisterCCallable("Xv", "Xv_vX_numeric_dgCMatrix", (DL_FUNC)Xv_vX_numeric_dgCMatrix_try);
@@ -223,6 +259,7 @@ RcppExport SEXP Xv_RcppExport_registerCCallable() {
 
 static const R_CallMethodDef CallEntries[] = {
     {"Xv_Xv_dgCMatrix_numeric", (DL_FUNC) &Xv_Xv_dgCMatrix_numeric, 2},
+    {"Xv_Xv_dgCMatrix_numeric_folded", (DL_FUNC) &Xv_Xv_dgCMatrix_numeric_folded, 5},
     {"Xv_Xv_dgTMatrix_numeric", (DL_FUNC) &Xv_Xv_dgTMatrix_numeric, 2},
     {"Xv_Xv_dgRMatrix_numeric", (DL_FUNC) &Xv_Xv_dgRMatrix_numeric, 2},
     {"Xv_vX_numeric_dgCMatrix", (DL_FUNC) &Xv_vX_numeric_dgCMatrix, 2},

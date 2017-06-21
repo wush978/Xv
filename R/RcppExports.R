@@ -5,6 +5,10 @@ Xv_dgCMatrix_numeric <- function(x, y) {
     .Call(Xv_Xv_dgCMatrix_numeric, x, y)
 }
 
+Xv_dgCMatrix_numeric_folded <- function(x, v, foldid, target, is_exclude) {
+    .Call(Xv_Xv_dgCMatrix_numeric_folded, x, v, foldid, target, is_exclude)
+}
+
 Xv_dgTMatrix_numeric <- function(x, y) {
     .Call(Xv_Xv_dgTMatrix_numeric, x, y)
 }

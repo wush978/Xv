@@ -63,3 +63,8 @@ for(name in result.names) {
     stop(conditionMessage(e))
   })
 }
+
+fm.all <- lapply(m.all, function(m) {
+  new("Folded.dMatrix", m, sample(1:5, nrow(m), TRUE))
+})
+folded.Xv(fm.all[[1]], rnorm(7), target = 1L, is.exclude = FALSE)

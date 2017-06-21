@@ -43,6 +43,25 @@ namespace Xv {
         return Rcpp::as<SEXP >(rcpp_result_gen);
     }
 
+    inline SEXP Xv_dgCMatrix_numeric_folded(S4 x, NumericVector v, IntegerVector foldid, int target, bool is_exclude) {
+        typedef SEXP(*Ptr_Xv_dgCMatrix_numeric_folded)(SEXP,SEXP,SEXP,SEXP,SEXP);
+        static Ptr_Xv_dgCMatrix_numeric_folded p_Xv_dgCMatrix_numeric_folded = NULL;
+        if (p_Xv_dgCMatrix_numeric_folded == NULL) {
+            validateSignature("SEXP(*Xv_dgCMatrix_numeric_folded)(S4,NumericVector,IntegerVector,int,bool)");
+            p_Xv_dgCMatrix_numeric_folded = (Ptr_Xv_dgCMatrix_numeric_folded)R_GetCCallable("Xv", "Xv_Xv_dgCMatrix_numeric_folded");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_Xv_dgCMatrix_numeric_folded(Rcpp::wrap(x), Rcpp::wrap(v), Rcpp::wrap(foldid), Rcpp::wrap(target), Rcpp::wrap(is_exclude));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<SEXP >(rcpp_result_gen);
+    }
+
     inline SEXP Xv_dgTMatrix_numeric(S4 x, NumericVector y) {
         typedef SEXP(*Ptr_Xv_dgTMatrix_numeric)(SEXP,SEXP);
         static Ptr_Xv_dgTMatrix_numeric p_Xv_dgTMatrix_numeric = NULL;
