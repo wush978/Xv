@@ -99,6 +99,30 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// vX_numeric_dgTMatrix
+SEXP vX_numeric_dgTMatrix(NumericVector x, S4 y);
+RcppExport SEXP Xv_vX_numeric_dgTMatrix(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< S4 >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(vX_numeric_dgTMatrix(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// vX_numeric_dgRMatrix
+SEXP vX_numeric_dgRMatrix(NumericVector x, S4 y);
+RcppExport SEXP Xv_vX_numeric_dgRMatrix(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< S4 >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(vX_numeric_dgRMatrix(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
 // _vX_dgCMatrix_numeric
 SEXP _vX_dgCMatrix_numeric(S4 X, NumericVector v, IntegerVector foldid, int target, bool is_exclude);
 RcppExport SEXP Xv__vX_dgCMatrix_numeric(SEXP XSEXP, SEXP vSEXP, SEXP foldidSEXP, SEXP targetSEXP, SEXP is_excludeSEXP) {
@@ -114,18 +138,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// vX_numeric_dgTMatrix
-SEXP vX_numeric_dgTMatrix(NumericVector x, S4 y);
-RcppExport SEXP Xv_vX_numeric_dgTMatrix(SEXP xSEXP, SEXP ySEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< S4 >::type y(ySEXP);
-    rcpp_result_gen = Rcpp::wrap(vX_numeric_dgTMatrix(x, y));
-    return rcpp_result_gen;
-END_RCPP
-}
 // _vX_dgTMatrix_numeric
 SEXP _vX_dgTMatrix_numeric(S4 X, NumericVector v, IntegerVector foldid, int target, bool is_exclude);
 RcppExport SEXP Xv__vX_dgTMatrix_numeric(SEXP XSEXP, SEXP vSEXP, SEXP foldidSEXP, SEXP targetSEXP, SEXP is_excludeSEXP) {
@@ -138,18 +150,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type target(targetSEXP);
     Rcpp::traits::input_parameter< bool >::type is_exclude(is_excludeSEXP);
     rcpp_result_gen = Rcpp::wrap(_vX_dgTMatrix_numeric(X, v, foldid, target, is_exclude));
-    return rcpp_result_gen;
-END_RCPP
-}
-// vX_numeric_dgRMatrix
-SEXP vX_numeric_dgRMatrix(NumericVector x, S4 y);
-RcppExport SEXP Xv_vX_numeric_dgRMatrix(SEXP xSEXP, SEXP ySEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< S4 >::type y(ySEXP);
-    rcpp_result_gen = Rcpp::wrap(vX_numeric_dgRMatrix(x, y));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -177,10 +177,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"Xv__Xv_dgTMatrix_numeric", (DL_FUNC) &Xv__Xv_dgTMatrix_numeric, 5},
     {"Xv__Xv_dgRMatrix_numeric", (DL_FUNC) &Xv__Xv_dgRMatrix_numeric, 5},
     {"Xv_vX_numeric_dgCMatrix", (DL_FUNC) &Xv_vX_numeric_dgCMatrix, 2},
-    {"Xv__vX_dgCMatrix_numeric", (DL_FUNC) &Xv__vX_dgCMatrix_numeric, 5},
     {"Xv_vX_numeric_dgTMatrix", (DL_FUNC) &Xv_vX_numeric_dgTMatrix, 2},
-    {"Xv__vX_dgTMatrix_numeric", (DL_FUNC) &Xv__vX_dgTMatrix_numeric, 5},
     {"Xv_vX_numeric_dgRMatrix", (DL_FUNC) &Xv_vX_numeric_dgRMatrix, 2},
+    {"Xv__vX_dgCMatrix_numeric", (DL_FUNC) &Xv__vX_dgCMatrix_numeric, 5},
+    {"Xv__vX_dgTMatrix_numeric", (DL_FUNC) &Xv__vX_dgTMatrix_numeric, 5},
     {"Xv__vX_dgRMatrix_numeric", (DL_FUNC) &Xv__vX_dgRMatrix_numeric, 5},
     {NULL, NULL, 0}
 };

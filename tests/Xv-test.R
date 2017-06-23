@@ -34,6 +34,7 @@ for(m in m.all) {
   stopifnot(.sm@defined@package == c("Matrix", "methods"))
   .sm <- selectMethod("%*%", signature(x = class(x1.2), y = class(m)))
   stopifnot(.sm@defined@package == c("methods", "Matrix"))
+  cat(sprintf("Xv-%s-numeric\n", class(m)))
   testXv(sprintf("Xv-%s-numeric", class(m)), m, x1.1, x1.2, function(x, y) x %*% y)
 }
 
@@ -43,6 +44,7 @@ for(name in result.names) {
   name.ref <- name
   name.test <- gsub("^Matrix", "Xv", name)
   tryCatch({
+    cat(sprintf("Checking %s and %s\n", name.ref, name.test))
     stopifnot(name.test %in% ls(test.env))
     stopifnot(is.numeric(test.env[[name.ref]]))
     stopifnot(is.numeric(test.env[[name.test]]))

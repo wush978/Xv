@@ -51,71 +51,49 @@ SEXP _Xv_dgRMatrix_numeric(S4 X, NumericVector v, IntegerVector foldid, int targ
   return Xv_number_folded(X, v, foldid, target, is_exclude, Xv::Xv_dgRMatrix_numeric_folded<NumericVector, std::vector<double> >);
 }
 
+template<typename F>
+SEXP vX_number(NumericVector x, S4 y, F& f) {
+  IntegerVector _Dim(y.slot("Dim"));
+  Xv::check_vX(_Dim, x);
+  NumericVector result(_Dim[1]);
+  f(y, x, result, nullptr, 0, true, nullptr);
+  return result;
+} 
 
 //[[Rcpp::export]]
 SEXP vX_numeric_dgCMatrix(NumericVector x, S4 y) {
-  IntegerVector _i(y.slot("i")), _p(y.slot("p")), _Dim(y.slot("Dim"));
-  Xv::check_vX(_Dim, x);
-  NumericVector _x(y.slot("x"));
+  return vX_number(x, y, Xv::vX_dgCMatrix_numeric_folded<NumericVector, NumericVector>);
+}
+
+//[[Rcpp::export]]
+SEXP vX_numeric_dgTMatrix(NumericVector x, S4 y) {
+  return vX_number(x, y, Xv::vX_dgTMatrix_numeric_folded<NumericVector, NumericVector>);
+}
+
+//[[Rcpp::export]]
+SEXP vX_numeric_dgRMatrix(NumericVector x, S4 y) {
+  return vX_number(x, y, Xv::vX_dgRMatrix_numeric_folded<NumericVector, NumericVector>);
+}
+
+template<typename F>
+SEXP vX_number_folded(S4 X, NumericVector v, IntegerVector foldid, int target, bool is_exclude, F& f) {
+  IntegerVector _Dim(X.slot("Dim"));
   NumericVector result(_Dim[1]);
-  for(auto col = 0;col < _Dim[1];col++) {
-    for(auto index = _p[col];index != _p[col + 1];index++) {
-      const auto row = _i[index];
-      const auto value = _x[index];
-      result[col] += x[row] * value;
-    }
-  }
+  f(X, v, result, foldid, target, is_exclude, nullptr);
   return result;
 }
 
 //[[Rcpp::export("vX_dgCMatrix_numeric_folded")]]
 SEXP _vX_dgCMatrix_numeric(S4 X, NumericVector v, IntegerVector foldid, int target, bool is_exclude) {
-  Rcout << "Calling vX_dgCMatrix_numeric_folded" << std::endl;
-  return R_NilValue;
-}
-
-
-//[[Rcpp::export]]
-SEXP vX_numeric_dgTMatrix(NumericVector x, S4 y) {
-  IntegerVector _i(y.slot("i")), _j(y.slot("j")), _Dim(y.slot("Dim"));
-  Xv::check_vX(_Dim, x);
-  NumericVector _x(y.slot("x"));
-  NumericVector result(_Dim[1]);
-  for(auto index = 0;index < _i.size();index++) {
-    const auto row = _i[index];
-    const auto col = _j[index];
-    const auto value = _x[index];
-    result[col] += x[row] * value;
-  }
-  return result;
+  return vX_number_folded(X, v, foldid, target, is_exclude, Xv::vX_dgCMatrix_numeric_folded<NumericVector, NumericVector>);
 }
 
 //[[Rcpp::export("vX_dgTMatrix_numeric_folded")]]
 SEXP _vX_dgTMatrix_numeric(S4 X, NumericVector v, IntegerVector foldid, int target, bool is_exclude) {
-  Rcout << "Calling vX_dgTMatrix_numeric_folded" << std::endl;
-  return R_NilValue;
-}
-
-
-//[[Rcpp::export]]
-SEXP vX_numeric_dgRMatrix(NumericVector x, S4 y) {
-  IntegerVector _j(y.slot("j")), _p(y.slot("p")), _Dim(y.slot("Dim"));
-  Xv::check_vX(_Dim, x);
-  NumericVector _x(y.slot("x"));
-  NumericVector result(_Dim[1]);
-  for(auto row = 0;row < _Dim[0];row++) {
-    for(auto index = _p[row];index != _p[row + 1];index++) {
-      const auto col = _j[index];
-      const auto value = _x[index];
-      result[col] += x[row] * value;
-    }
-  }
-  return result;
+  return vX_number_folded(X, v, foldid, target, is_exclude, Xv::vX_dgTMatrix_numeric_folded<NumericVector, NumericVector>);
 }
 
 //[[Rcpp::export("vX_dgRMatrix_numeric_folded")]]
 SEXP _vX_dgRMatrix_numeric(S4 X, NumericVector v, IntegerVector foldid, int target, bool is_exclude) {
-  Rcout << "Calling vX_dgRMatrix_numeric_folded" << std::endl;
-  return R_NilValue;
+  return vX_number_folded(X, v, foldid, target, is_exclude, Xv::vX_dgRMatrix_numeric_folded<NumericVector, NumericVector>);
 }
-

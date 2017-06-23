@@ -3,30 +3,37 @@
 .onLoad <- function(libname, pkgname) {
 }
 
-#'@importFrom methods setMethod representation setClass signature setValidity setGeneric
+#'@importFrom methods setMethod representation setClass signature setValidity setGeneric selectMethod
 #'@importClassesFrom Matrix dgCMatrix
 #'@importClassesFrom Matrix dgTMatrix
 #'@importClassesFrom Matrix dgRMatrix
 #'@export folded.Xv folded.vX
 evalqOnLoad({
   local({
+    setMethodWrapper <- function(f, signature, definition) {
+      .sm <- selectMethod(f, signature, optional = TRUE)
+      if (identical(class(.sm), structure("MethodDefinition", package = "methods"))) {
+        if (identical(.sm@defined, signature)) return(invisible(NULL))
+      }
+      setMethod(f, signature, definition)
+    }
     configureS4Method <- function(name, m.name) {
       force(name)
       force(m.name)
-      setMethod("%*%", signature(x = m.name, y = "numeric"), get(sprintf("Xv_%s_numeric", m.name)))
-      setMethod("%*%", signature(x = "numeric", y = m.name), get(sprintf("vX_numeric_%s", m.name)))
+      setMethodWrapper("%*%", signature(x = m.name, y = "numeric"), get(sprintf("Xv_%s_numeric", m.name)))
+      setMethodWrapper("%*%", signature(x = "numeric", y = m.name), get(sprintf("vX_numeric_%s", m.name)))
       getf <- function(fname) {
         force(fname)
         function(X, v, foldid, target, is_exclude) {
           get(fname)(X@m, v, foldid, target, is_exclude)
         }
       }
-      setMethod(
+      setMethodWrapper(
         sprintf("folded.%s", name),
         signature(X = "Folded.dMatrix", v = "numeric", foldid = "integer", target = "integer", is_exclude = "logical"),
         getf(sprintf("folded.%s", name))
       )
-      setMethod(
+      setMethodWrapper(
         sprintf("folded.%s", name), 
         signature(X = m.name, v = "numeric", foldid = "integer", target = "integer", is_exclude = "logical"),
         get(sprintf("%s_%s_numeric_folded", name, m.name))
@@ -45,7 +52,7 @@ evalqOnLoad({
       stopifnot(sum(object@foldid.count) == nrow(object@m))
       stopifnot(all(foldid > 0))
     })
-    setMethod(
+    setMethodWrapper(
       "initialize",
       signature(.Object = "Folded.dMatrix"),
       function(.Object, m, foldid) {
