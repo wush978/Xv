@@ -28,7 +28,7 @@ std::size_t Xv_dgCMatrix_numeric_folded(
     const Rcpp::S4& X,
     InputVecType& v,
     ReturnType& result,
-    const boost::variant<Rcpp::IntegerVector, nullptr_t>& foldid = nullptr,
+    const boost::variant<Rcpp::IntegerVector, std::nullptr_t>& foldid = nullptr,
     const int target = 0,
     const bool is_exclude = true
   ) {
