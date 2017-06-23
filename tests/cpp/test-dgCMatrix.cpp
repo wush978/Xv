@@ -42,7 +42,7 @@ library(Matrix)
 m <- sparse.model.matrix(~ ., iris)
 x <- rnorm(ncol(m))
 foldid <- sample(1:3, nrow(m), TRUE)
-r1 <- head(test(m, x, foldid), folds)
+r1 <- head(test(m, x, foldid), max(folds))
 r2 <- lapply(folds, function(fold) {
   result <- m[foldid == fold,] %*% x
   if (!is.numeric(result)) result@x else result
