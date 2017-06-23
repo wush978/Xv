@@ -54,8 +54,3 @@ for(name in result.names) {
   })
 }
 
-# check C API
-
-for(path in dir("cpp", pattern = "*.cpp$", full.names = TRUE)) {
-  Rcpp::sourceCpp(path)
-}

@@ -8,6 +8,8 @@ fm.all <- lapply(m.all, function(m) {
   new("Folded.dMatrix", m, foldid)
 })
 
+# check result in R
+
 for(i in seq_along(m.all)) {
   m <- m.all[[i]]
   fm <- fm.all[[i]]
