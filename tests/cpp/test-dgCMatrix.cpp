@@ -2,7 +2,19 @@
 //[[Rcpp::plugins(openmp)]]
 //[[Rcpp::depends(Xv, BH)]]
 
+#ifdef _OPENMP
 #include <omp.h>
+#else
+  static int num_thread = 0;
+
+  static void omp_set_num_threads(int num) {
+    num_thread = num;
+  }
+  
+  static int omp_get_thread_num(void) {
+    return 0;
+  }
+#endif
 #include <Xv.h>
 #include <Rcpp.h>
 using namespace Rcpp;
@@ -30,8 +42,8 @@ library(Matrix)
 m <- sparse.model.matrix(~ ., iris)
 x <- rnorm(ncol(m))
 foldid <- sample(1:3, nrow(m), TRUE)
-r1 <- test(m, x, foldid)
-r2 <- lapply(1:3, function(fold) {
+r1 <- head(test(m, x, foldid), folds)
+r2 <- lapply(folds, function(fold) {
   result <- m[foldid == fold,] %*% x
   if (!is.numeric(result)) result@x else result
 })
