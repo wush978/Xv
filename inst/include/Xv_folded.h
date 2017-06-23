@@ -104,6 +104,23 @@ inline std::function<bool(int)> create_checker(
   }
 }
 
+inline std::function<int(int)> create_local_row_mapping(
+    const boost::variant< std::nullptr_t, std::function<int(int)> >& row_mapping_container,
+    const int target,
+    std::function<bool(int)>& checker,
+    const int nrow
+) {
+  std::function<int(int)> result = [](int row) {
+    return row;
+  };
+  if (target > 0) {
+    if (row_mapping_container.which() == 0) {
+      result = create_row_mapping(checker, nrow);
+    }
+  }
+  return result;
+}
+
 template<typename InputVecType, typename ReturnType>
 std::size_t Xv_dgCMatrix_numeric_folded(
     const Rcpp::S4& X,
@@ -129,23 +146,6 @@ std::size_t Xv_dgCMatrix_numeric_folded(
   }
   if (target == 0) return _Dim[0];
   return clean_row(checker, _Dim[0], result);
-}
-
-inline std::function<int(int)> create_local_row_mapping(
-  const boost::variant< std::nullptr_t, std::function<int(int)> >& row_mapping_container,
-  const int target,
-  std::function<bool(int)>& checker,
-  const int nrow
-) {
-  std::function<int(int)> result = [](int row) {
-    return row;
-  };
-  if (target > 0) {
-    if (row_mapping_container.which() == 0) {
-      result = create_row_mapping(checker, nrow);
-    }
-  }
-  return result;
 }
 
 template<typename InputVecType, typename ReturnType>

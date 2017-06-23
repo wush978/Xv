@@ -20,7 +20,7 @@
 using namespace Rcpp;
 
 //[[Rcpp::export]]
-SEXP test(S4 m, NumericVector x, IntegerVector foldid) {
+SEXP testXv(S4 m, NumericVector x, IntegerVector foldid) {
   std::vector< std::vector<double> > result;
   int max_fold = *std::max_element(foldid.begin(), foldid.end());
   omp_set_num_threads(max_fold);
@@ -36,16 +36,53 @@ SEXP test(S4 m, NumericVector x, IntegerVector foldid) {
   return wrap(result);
 }
 
+//[[Rcpp::export]]
+SEXP testvX(S4 m, NumericVector x, IntegerVector foldid) {
+  std::vector< std::vector<double> > result;
+  int max_fold = *std::max_element(foldid.begin(), foldid.end());
+  omp_set_num_threads(max_fold);
+  result.resize(max_fold);
+  const IntegerVector _Dim(m.slot("Dim"));
+#pragma omp parallel
+  {
+    int target = omp_get_thread_num() + 1;
+    bool is_exclude = false;
+    std::vector<double>& result_element(result[omp_get_thread_num()]);
+    result_element.resize(_Dim[1], 0.0);
+    auto checker(Xv::create_checker(foldid, target, is_exclude));
+    auto local_row_mapping(Xv::create_local_row_mapping(nullptr, target, checker, _Dim[0]));
+    std::vector<double> local_x(x.size(), 0.0);
+    for(int row = 0;row < _Dim[0];row++) {
+      if (checker(row)) continue;
+      local_x[local_row_mapping(row)] = x[row];
+    }
+    Xv::vX_dgCMatrix_numeric_folded(m, local_x, result_element, foldid, target, false, local_row_mapping);
+  }
+  return wrap(result);
+}
+
 /***R
 library(methods)
 library(Matrix)
-m <- sparse.model.matrix(~ ., iris)
-x <- rnorm(ncol(m))
-foldid <- sample(1:3, nrow(m), TRUE)
-r1 <- head(test(m, x, foldid), max(folds))
+m <- matrix(1:4, 2, 2)
+m <- as(m, "dgCMatrix")
+set.seed(1)
+foldid <- 1:2
+
+x <- 1:ncol(m)
+r1 <- head(testXv(m, x, foldid), max(folds))
 r2 <- lapply(folds, function(fold) {
   result <- m[foldid == fold,] %*% x
-  if (!is.numeric(result)) result@x else result
+  if (isS4(result)) result@x else as.vector(result)
 })
 stopifnot(isTRUE(all.equal(r1, r2)))
+
+x <- 1:nrow(m)
+r1 <- head(testvX(m, x, foldid), max(folds))
+r2 <- lapply(folds, function(fold) {
+  result <- x[foldid == fold] %*% m[foldid == fold,]
+  if (isS4(result)) result@x else as.vector(result)
+})
+stopifnot(isTRUE(all.equal(r1, r2)))
+  
 */

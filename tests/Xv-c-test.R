@@ -3,7 +3,7 @@ if (Sys.info()["sysname"] == "Darwin") {
   Rcpp::registerPlugin("openmp", Rcpp::Rcpp.plugin.maker())
   folds <- 1
 } else {
-  folds <- 1:3
+  folds <- 1:2
 }
 
 
