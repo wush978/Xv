@@ -5,20 +5,20 @@ Xv_dgCMatrix_numeric <- function(x, y) {
     .Call(Xv_Xv_dgCMatrix_numeric, x, y)
 }
 
-Xv_dgCMatrix_numeric_folded <- function(X, v, foldid, target, is_exclude) {
-    .Call(Xv__Xv_dgCMatrix_numeric, X, v, foldid, target, is_exclude)
-}
-
 Xv_dgTMatrix_numeric <- function(x, y) {
     .Call(Xv_Xv_dgTMatrix_numeric, x, y)
 }
 
-Xv_dgTMatrix_numeric_folded <- function(X, v, foldid, target, is_exclude) {
-    .Call(Xv__Xv_dgTMatrix_numeric, X, v, foldid, target, is_exclude)
-}
-
 Xv_dgRMatrix_numeric <- function(x, y) {
     .Call(Xv_Xv_dgRMatrix_numeric, x, y)
+}
+
+Xv_dgCMatrix_numeric_folded <- function(X, v, foldid, target, is_exclude) {
+    .Call(Xv__Xv_dgCMatrix_numeric, X, v, foldid, target, is_exclude)
+}
+
+Xv_dgTMatrix_numeric_folded <- function(X, v, foldid, target, is_exclude) {
+    .Call(Xv__Xv_dgTMatrix_numeric, X, v, foldid, target, is_exclude)
 }
 
 Xv_dgRMatrix_numeric_folded <- function(X, v, foldid, target, is_exclude) {
