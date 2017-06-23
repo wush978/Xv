@@ -1,16 +1,6 @@
 
 if (isNamespaceLoaded("Xv")) unloadNamespace("Xv")
-m1 <- Matrix::sparse.model.matrix(~ ., iris)
-m2 <- as(m1, "RsparseMatrix")
-stopifnot(class(m1) == "dgCMatrix")
-m2 <- as(m1, "dgTMatrix")
-stopifnot(class(m2) == "dgTMatrix")
-m3 <- as(m2, "RsparseMatrix")
-stopifnot(class(m3) == "dgRMatrix")
-m.all <- list(m1, m2, m3)
-set.seed(1)
-x1.1 <- rnorm(ncol(m1))
-x1.2 <- rnorm(nrow(m1))
+source("R/init.R")
 test.env <- new.env()
 
 # check testing method
@@ -64,7 +54,8 @@ for(name in result.names) {
   })
 }
 
-fm.all <- lapply(m.all, function(m) {
-  new("Folded.dMatrix", m, sample(1:5, nrow(m), TRUE))
-})
-folded.Xv(fm.all[[1]], rnorm(7), target = 1L, is.exclude = FALSE)
+# check C API
+
+for(path in dir("cpp", pattern = "*.cpp$", full.names = TRUE)) {
+  Rcpp::sourceCpp(path)
+}

@@ -3,103 +3,80 @@
 .onLoad <- function(libname, pkgname) {
 }
 
-#'@importFrom methods setMethod representation
+#'@importFrom methods setMethod representation setClass signature setValidity setGeneric
 #'@importClassesFrom Matrix dgCMatrix
 #'@importClassesFrom Matrix dgTMatrix
 #'@importClassesFrom Matrix dgRMatrix
+#'@export folded.Xv folded.vX
 evalqOnLoad({
-  
-  for(name in c("dgCMatrix", "dgTMatrix", "dgRMatrix")) {
-    setMethod("%*%", signature(x = name, y = "numeric"), get(sprintf("Xv_%s_numeric", name)))
-    setMethod("%*%", signature(x = "numeric", y = name), get(sprintf("vX_numeric_%s", name)))
-  }
-  rm(name)
-  setClass(
-    "Folded.dMatrix", 
-    representation = representation(
-      m = structure("dMatrix", package = "Matrix"),
-      foldid = "integer",
-      foldid.count = "integer" 
-    )
-  )
-  
-  setValidity("Folded.dMatrix", function(object) {
-    stopifnot(length(object@foldid) == nrow(object@m))
-    stopifnot(sum(object@foldid.count) == nrow(object@m))
-  })
-  
-  setMethod(
-    "initialize",
-    signature(.Object = "Folded.dMatrix"),
-    function(.Object, m, foldid) {
-      .Object@m <- m
-      .Object@foldid <- foldid
-      tb <- table(foldid)
-      .Object@foldid.count <- as.integer(tb[paste(seq_len(length(unique(foldid))))])
-      validObject(.Object)
-      .Object
-    }
-  )
-
-  
-  for(name in c("Xv", "vX")) {
-    fname <- sprintf("folded.%s", name)
-    force(fname)
-    getStandardGeneric <- function(fname) {
-      force(fname)
-      function(...) standardGeneric(fname)
-    }
-    #'@export folded.Xv folded.vX
-    setGeneric(fname, function(X, v, foldid, target, is.exclude) {
-      f <- force(getStandardGeneric(fname))
-      f(X, v, foldid, target, is.exclude)
-    })
-    rm(getStandardGeneric)
-    get.fname <- function(fname) {
-      force(fname)
-      get(fname)
-    }
-  
-    for(m.name in c("dgCMatrix", "dgTMatrix", "dgRMatrix")) {
-      getInternalFunction <- function(fname) {
+  local({
+    configureS4Method <- function(name, m.name) {
+      force(name)
+      force(m.name)
+      setMethod("%*%", signature(x = m.name, y = "numeric"), get(sprintf("Xv_%s_numeric", m.name)))
+      setMethod("%*%", signature(x = "numeric", y = m.name), get(sprintf("vX_numeric_%s", m.name)))
+      getf <- function(fname) {
         force(fname)
-        function(X, v, foldid, target, is.exclude) {
-          cat("Calling %s", fname)
-          invisible(NULL)
+        function(X, v, foldid, target, is_exclude) {
+          get(fname)(X@m, v, foldid, target, is_exclude)
         }
       }
-      assign(
-        sprintf("%s_%s_numeric_folded", name, m.name),
-        value = getInternalFunction(sprintf("%s_%s_numeric_folded", name, m.name))
+      setMethod(
+        sprintf("folded.%s", name),
+        signature(X = "Folded.dMatrix", v = "numeric", foldid = "integer", target = "integer", is_exclude = "logical"),
+        getf(sprintf("folded.%s", name))
       )
       setMethod(
-        fname,
-        signature(X = m.name, v = "numeric", foldid = "integer", target = "integer", is.exclude = "logical"),
+        sprintf("folded.%s", name), 
+        signature(X = m.name, v = "numeric", foldid = "integer", target = "integer", is_exclude = "logical"),
         get(sprintf("%s_%s_numeric_folded", name, m.name))
       )
     }
-    rm(getInternalFunction)
-
-    
+    setClass(
+      "Folded.dMatrix", 
+      representation = representation(
+        m = structure("dMatrix", package = "Matrix"),
+        foldid = "integer",
+        foldid.count = "integer" 
+      )
+    )
+    setValidity("Folded.dMatrix", function(object) {
+      stopifnot(length(object@foldid) == nrow(object@m))
+      stopifnot(sum(object@foldid.count) == nrow(object@m))
+      stopifnot(all(foldid > 0))
+    })
     setMethod(
-      fname,
-      signature(X = "Folded.dMatrix", v = "numeric", foldid = "integer", target = "integer", is.exclude = "logical"),
-      function(X, v, foldid, target, is.exclude) {
-        get.fname(fname)(X@m, v, foldid, target, is.exclude)
+      "initialize",
+      signature(.Object = "Folded.dMatrix"),
+      function(.Object, m, foldid) {
+        .Object@m <- m
+        .Object@foldid <- foldid
+        tb <- table(foldid)
+        .Object@foldid.count <- as.integer(tb[paste(seq_len(length(unique(foldid))))])
+        validObject(.Object)
+        .Object
       }
     )
 
-    setMethod(
-      fname,
-      signature(X = "Folded.dMatrix", v = "numeric", foldid = "missing", target = "integer", is.exclude = "logical"),
-      function(X, v, target, is.exclude) {
-        get.fname(fname)(X@m, v, X@foldid, target, is.exclude)
+    setGeneric("folded.Xv", function(X, v, foldid, target, is_exclude) {
+      standardGeneric("folded.Xv")
+    })
+    setGeneric("folded.vX", function(X, v, foldid, target, is_exclude) {
+      standardGeneric("folded.vX")
+    })
+    for(name in c("Xv", "vX")) {
+      for(m.name in c("dgCMatrix", "dgTMatrix", "dgRMatrix")) {
+        configureS4Method(name, m.name)
       }
-    )
-    
-    
-  }
-  rm(name, fname)
-    
-
+    }
+  })
 })
+
+#'@name folded.Xv
+#'@title Folded Matrix-Vector Multiplication
+#'@param X Matrix.
+#'@param v numeric vector.
+#'@param foldid integer vector. Specifying the foldid of each rows.
+#'@param target integer value. The target fold id
+#'@param is_exclude logical value. Whether to exclude those rows belong to the target fold or not.
+NULL

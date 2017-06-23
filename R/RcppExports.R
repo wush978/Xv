@@ -5,31 +5,47 @@ Xv_dgCMatrix_numeric <- function(x, y) {
     .Call(Xv_Xv_dgCMatrix_numeric, x, y)
 }
 
-Xv_dgCMatrix_numeric_folded <- function(x, v, foldid, target, is_exclude) {
-    .Call(Xv_Xv_dgCMatrix_numeric_folded, x, v, foldid, target, is_exclude)
+Xv_dgCMatrix_numeric_folded <- function(X, v, foldid, target, is_exclude) {
+    .Call(Xv__Xv_dgCMatrix_numeric, X, v, foldid, target, is_exclude)
 }
 
 Xv_dgTMatrix_numeric <- function(x, y) {
     .Call(Xv_Xv_dgTMatrix_numeric, x, y)
 }
 
+Xv_dgTMatrix_numeric_folded <- function(X, v, foldid, target, is_exclude) {
+    .Call(Xv__Xv_dgTMatrix_numeric, X, v, foldid, target, is_exclude)
+}
+
 Xv_dgRMatrix_numeric <- function(x, y) {
     .Call(Xv_Xv_dgRMatrix_numeric, x, y)
+}
+
+Xv_dgRMatrix_numeric_folded <- function(X, v, foldid, target, is_exclude) {
+    .Call(Xv__Xv_dgRMatrix_numeric, X, v, foldid, target, is_exclude)
 }
 
 vX_numeric_dgCMatrix <- function(x, y) {
     .Call(Xv_vX_numeric_dgCMatrix, x, y)
 }
 
+vX_dgCMatrix_numeric_folded <- function(X, v, foldid, target, is_exclude) {
+    .Call(Xv__vX_dgCMatrix_numeric, X, v, foldid, target, is_exclude)
+}
+
 vX_numeric_dgTMatrix <- function(x, y) {
     .Call(Xv_vX_numeric_dgTMatrix, x, y)
+}
+
+vX_dgTMatrix_numeric_folded <- function(X, v, foldid, target, is_exclude) {
+    .Call(Xv__vX_dgTMatrix_numeric, X, v, foldid, target, is_exclude)
 }
 
 vX_numeric_dgRMatrix <- function(x, y) {
     .Call(Xv_vX_numeric_dgRMatrix, x, y)
 }
 
-# Register entry points for exported C++ functions
-methods::setLoadAction(function(ns) {
-    .Call('Xv_RcppExport_registerCCallable', PACKAGE = 'Xv')
-})
+vX_dgRMatrix_numeric_folded <- function(X, v, foldid, target, is_exclude) {
+    .Call(Xv__vX_dgRMatrix_numeric, X, v, foldid, target, is_exclude)
+}
+
